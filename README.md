@@ -14,6 +14,7 @@
 ![image](assets/FairerCLIP-model.png)
 Welcome to the official repository for the paper, <a href="https://sepehrdehdashtian.github.io/Papers/FairerCLIP/index.html">FairerCLIP: Debiasing CLIP’s Zero-Shot Predictions using Functions in RKHSs</a>, published in the Twelfth International Conference on Learning Representations (ICLR'24).
 
+Authors: [Sepehr Dehdashtian](https://sepehrdehdashtian.github.io/)\*, [Lan Wang](https://lan-lw.github.io/)\* and [Vishnu Naresh Boddeti](https://vishnu.boddeti.net/)
 
 ## Abstract
 
@@ -84,19 +85,6 @@ CUDA_VISIBLE_DEVICES=0 python train.py --config-file configs/debias_celeba_RN50.
 ```
 CUDA_VISIBLE_DEVICES=0 python train_eo.py --config-file configs/debias_celeba_highcheek.yaml
 ```
-
-## Contributors
-### Authors
-* [Sepehr Dehdashtian](https://sepehrdehdashtian.github.io/)*
-* [Lan Wang](https://lan-lw.github.io/)*
-* [Vishnu Naresh Boddeti](https://vishnu.boddeti.net/)
-
-*Equal Contribution
-
-### Code Contributors
-* [Lan Wang](https://lan-lw.github.io/)
-* [Sepehr Dehdashtian](https://sepehrdehdashtian.github.io/)
-
 
 ## Citation
 If you find this paper and repository useful for your research, please consider citing the paper:
