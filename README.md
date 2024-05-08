@@ -104,7 +104,7 @@ If you find this paper and repository useful for your research, please consider 
 @inproceedings{dehdashtian2024fairerclip,
   title={FairerCLIP: Debiasing CLIP's Zero-Shot Predictions using Functions in RKHSs},
   author={Dehdashtian, Sepehr and Wang, Lan and Boddeti, Vishnu Naresh},
-  booktitle={The Twelfth International Conference on Learning Representations},
+  booktitle={International Conference on Learning Representations (ICLR)},
   year={2024}
 }
 ```
