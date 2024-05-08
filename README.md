@@ -37,7 +37,7 @@ Welcome to the official repository for the paper, <a href="https://sepehrdehdash
 
 ## How to use
 ```
-git clone https://github.com/lan-lw/FairerCLIP.git
+git clone https://github.com/human-analysis/FairerCLIP.git
 cd FairerCLIP
 ```
 
