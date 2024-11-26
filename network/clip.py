@@ -97,8 +97,8 @@ def evaluate_clip(clip_predictions, target, group, verbose=False):
     - clip_predictions (np.array): predictions
     - dataloader (torch.utils.data.DataLoader): (unshuffled) dataloader
     """
-    targets_t = target.numpy().astype(int).argmax(1)
-    targets_s = group.numpy().astype(int).argmax(1)
+    targets_t = target.cpu().numpy().astype(int).argmax(1)
+    targets_s = group.cpu().numpy().astype(int).argmax(1)
 
     correct_by_groups = np.zeros([len(np.unique(targets_t)),
                                   len(np.unique(targets_s))])

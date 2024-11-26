@@ -1,0 +1,80 @@
+rff_flag: True
+nolabel: False
+iters: 2
+
+kernel_x: RFFGaussian
+kernel_x_options:
+ rff_dim: 3000
+ sigma_numel_max: 4000
+
+
+kernel_s: RFFLinear
+
+
+kernel_y: RFFLinear
+
+kernel_z: RFFGaussian
+kernel_z_options:
+ rff_dim: 3000
+ sigma_numel_max: 4000
+
+
+metric_control:
+  HSIC: "NonParametricDependence"
+  KCC: "NonParametricDependence"
+
+
+metric_control_options:
+  HSIC:
+    rff: 1
+    score_list:
+      HSIC: {}
+    kernel_z: "RFFGaussian"
+    kernel_z_opts:
+      rff_dim: 1000
+      sigma_numel_max: 3000
+    kernel_s: "RFFGaussian"
+    kernel_s_opts:
+      rff_dim: 1000
+      sigma_numel_max: 3000
+  KCC:
+    rff: 1
+    score_list:
+      KCC:
+        lam: 0.001
+    kernel_z: "RFFGaussian"
+    kernel_z_opts:
+      rff_dim: 1000
+      sigma_numel_max: 3000
+    kernel_s: "RFFGaussian"
+    kernel_s_opts:
+      rff_dim: 1000
+      sigma_numel_max: 3000
+
+
+
+dim_z: 1
+
+
+gamma_i: 3e-4
+
+gamma_t: 2e-4
+
+tau_i: 0.7
+
+tau_z_i: 0.7
+
+tau_t: 0.1
+
+tau_z_t: 0.1
+
+sample_ratio1: 1.0
+
+sample_ratio2: 1.0
+
+seed: 2
+
+load_base_model: clip_ViTL14
+
+dataset: waterbirds
+debias: True

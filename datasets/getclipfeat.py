@@ -1,8 +1,8 @@
 import numpy as np
 import torch
 from torch.utils.data import Dataset, DataLoader
-
-
+import pandas as pd
+import os
 
 class Clipfeature(Dataset):
     """
@@ -55,6 +55,7 @@ class Clipfeature(Dataset):
                 self.labels_s = (torch.nn.functional.one_hot(torch.from_numpy(labels[:, 4].astype(int)), num_classes=2))*2-1
                 self.labels_y = (torch.nn.functional.one_hot(torch.from_numpy(labels[:, 2].astype(int)), num_classes=2))*2-1
                 self.labels_y_gt = self.labels_y
+
         elif cfg.dataset=='celebA':
             if split == 'train':
                 labels = np.loadtxt('./features/celeba_train.csv', delimiter=',', dtype=str)
@@ -155,10 +156,93 @@ class Clipfeature(Dataset):
                 self.labels_s[self.labels_s == 0] = -1
                 self.labels_y_gt = self.labels_y
 
+            
+        elif cfg.dataset=='CFD':
+            features = torch.load('./features/d=CFD-s=all-m=clip_ViTL14.pt')
+            attrs_file = './features/CFD_attributes.csv'
+            target_attr    = "Attractive"
+            sensitive_attr    = "GenderSelf"
+
+            df = pd.read_csv(attrs_file)
+            labels_y = self.load_attributes(df, target_attr)
+            labels_s = self.load_attributes(df, sensitive_attr)
+
+            labels_y_onehot = torch.nn.functional.one_hot(labels_y.long(), num_classes=labels_y.max()+1)
+            labels_y_onehot[labels_y_onehot==0] = -1
+            labels_s_onehot = torch.nn.functional.one_hot(labels_s.long(), num_classes=labels_s.max()+1)
+            labels_s_onehot[labels_s_onehot==0] = -1
+
+            train_split = 0.6
+            
+            randperm_idx    = torch.randperm(len(features))
+            train_idx  = randperm_idx[: int(train_split * len(features))]
+            test_idx   = randperm_idx[int(train_split   * len(features)):]
+            
+            imfeat_train, y_train, y_train_onehot = features[train_idx], labels_y[train_idx], labels_y_onehot[train_idx]
+            imfeat_test,  y_test,  s_test,  y_test_onehot,  s_test_onehot  = features[test_idx],  labels_y[test_idx],  labels_s[test_idx],  labels_y_onehot[test_idx],  labels_s_onehot[test_idx]
+            
+            
+
+            # load the text embeddings
+            text_embeddings = torch.load('./features/d=CFD_text_features-m=clip_ViTL14.pt')    
+            textfeat_train = text_embeddings[y_train.long()]
+            textfeat_test  = text_embeddings[y_test.long()]
+
+
+            if split == 'train':
+                self.imfeat = imfeat_train.to(cfg.device)
+                self.textfeat = textfeat_train.to(cfg.device)
+                self.labels_y = y_train_onehot.to(cfg.device)
+                # self.labels_s = s_train_onehot.to(cfg.device)
+                self.labels_y_gt = y_train_onehot.to(cfg.device)
+
+                spurious_prompt_embeddings = torch.load('./features/d=CFD_text_features_s-m=clip_ViTL14.pt')
+                s_train = self.get_predictions(imfeat_train, spurious_prompt_embeddings, temperature=100.)
+                labels_s_onehot_train_predicted = torch.nn.functional.one_hot(torch.from_numpy(s_train), num_classes=labels_s.max() + 1)
+                labels_s_onehot_train_predicted[labels_s_onehot_train_predicted == 0] = -1
+                self.labels_s = labels_s_onehot_train_predicted.to(cfg.device)
+
+            elif split == 'test':
+                self.imfeat = imfeat_test.to(cfg.device)
+                self.textfeat = textfeat_test.to(cfg.device)
+                self.labels_y = y_test_onehot.to(cfg.device)
+                self.labels_s = s_test_onehot.to(cfg.device)
+                self.labels_y_gt = y_test_onehot.to(cfg.device)
+
         else:
-            raise RuntimeError(f"no matched dataset (waterbirds / celeba)")
+            raise RuntimeError(f"No matched dataset (waterbirds / celeba / CFD)")
+
+    @staticmethod
+    def get_predictions(image_embeddings,
+                             text_embeddings,
+                             temperature=100.):
+        with torch.no_grad():
+            _image_embeddings = (image_embeddings / 
+                                image_embeddings.norm(dim=-1, keepdim=True))
+            
+            _text_embeddings = (text_embeddings /
+                                text_embeddings.norm(dim=-1, keepdim=True))
+
+            cross = _image_embeddings @ _text_embeddings.T
+            text_probs = (temperature * cross).softmax(dim=-1)
+            _, predicted = torch.max(text_probs.data, 1)
+            
+        return predicted.cpu().numpy()
 
 
+    @staticmethod
+    def load_attributes(df, attr_name):
+        attr = df[attr_name].copy()
+        if attr_name in ["GenderSelf", "EthnicitySelf"]:
+            for i, cls in enumerate(df[attr_name].unique()):
+                attr[attr == cls] = i
+                
+            attributes = torch.tensor(attr.tolist())
+        
+        else: # continuous attributes
+            attr -= attr.mean()
+            attributes = torch.from_numpy(attr.values > 0).int()
+        return attributes
 
     def __len__(self):
         return len(self.imfeat)
