@@ -47,6 +47,7 @@ A ```requirements.txt``` file has been provided.
 
 ### 1. Download the pre-extracted features
 Create a folder named features and download the features and labels [Google Drive](https://drive.google.com/file/d/12rp60K_ifPicHxPHnXlD5v77HeMX8qaK/view?usp=sharing).
+For CFD dataset, please download [Google Drive](https://drive.google.com/file/d/1-rDO8ZdO-KAzfjAdksBw1RZYIrgfW_YL/view?usp=drive_link).
 ```
 mkdir features
 ```
