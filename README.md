@@ -3,8 +3,8 @@
 <p align="center">
   <a href="https://arxiv.org/abs/2403.15593"><img src="https://img.shields.io/static/v1?label=arXiv&message=2403.15593&color=B31B1B" alt="arXiv"></a>
   <a href="https://sepehrdehdashtian.github.io/Papers/FairerCLIP/index.html"><img src="https://img.shields.io/badge/Website-Page-cyan" alt="website"></a>
-  <a href="https://recorder-v3.slideslive.com/?share=92139&s=ebe4594f-2c48-4884-8168-8fe962dd2630"><img src="https://img.shields.io/badge/Video-SlidesLive-purple" alt="video"></a>
-  <a href="https://sepehrdehdashtian.github.io/Presentations/FairerCLIP-short.html"><img src="https://img.shields.io/badge/Slides-RevealJS-Green" alt="video"></a>
+  <a href="https://iclr.cc/virtual/2024/poster/18989"><img src="https://img.shields.io/badge/Video-SlidesLive-purple" alt="video"></a>
+  <a href="https://sepehrdehdashtian.github.io/Presentations/FairerCLIP-short.html"><img src="https://img.shields.io/badge/Slides-RevealJS-Green" alt="slides"></a>
   <a href="https://iclr.cc/media/PosterPDFs/ICLR%202024/18989.png?t=1715123299.2780206"><img src="https://img.shields.io/badge/Poster-ICLR-yellow" alt="video"></a>
 </p>
 
