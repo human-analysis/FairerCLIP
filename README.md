@@ -64,6 +64,9 @@ CUDA_VISIBLE_DEVICES=0 python train.py --config-file configs/debias_celeba.yaml
 # CelebA Dataset + CLIP ResNet-50
 CUDA_VISIBLE_DEVICES=0 python train.py --config-file configs/debias_celeba_RN50.yaml
 
+# CFD Dataset + CLIP ViT-L/14
+CUDA_VISIBLE_DEVICES=0 python train.py --config-file configs/debias_cfd.yaml
+
 ```
 
 ### 3. Mitigating spurious correlation (w/o labels)
